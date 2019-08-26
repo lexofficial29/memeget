@@ -1,6 +1,6 @@
 # Memeget
 
-**Memeget is a small program written in python for automatic meme gathering. The program gets its memes from meme-api.herokuapp.com API.**
+**Memeget is a small program written in python for automatic meme gathering. The program gets its memes from the meme-api.herokuapp.com API.**
 
 
 # Installation
