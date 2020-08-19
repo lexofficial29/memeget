@@ -1,35 +1,26 @@
-import urllib.request
-import subprocess
-x = 0
-y = 0
-already = []
+import praw
+import requests
+import time
 
-while 1 == 1:
+reddit = praw.Reddit(client_id='CLIENT ID GOES HERE',
+		     client_secret='SECRET TOKEN GOES HERE',
+		     user_agent='my user agent')
+used = []
+
+while True:
 	try:
-		batcmd = "curl -S --fail --silent --show-error https://meme-api.herokuapp.com/gimme"
-		result = subprocess.check_output(batcmd, shell=True)
-		result = str(result)
-		while "imgur" in result:
-			batcmd = "curl -S --fail --silent --show-error https://meme-api.herokuapp.com/gimme"
-			result = subprocess.check_output(batcmd, shell=True)
-			result = str(result)
-		sep = '"url":"'
-		result = result.rsplit(sep, 1)[1]
-		result = result.rsplit("\"", 1)[0]
-		name = result.replace("https://i.redd.it/","")
-	except:
-		pass
-	try:
-		if name in already:
-			y = y + 1
-			pass
-		else:
-			try:
-				urllib.request.urlretrieve(result, name)
-				x = x + 1
-				already.append(name)
-				print("Got [" + str(x) + "] " + name + " Duplicates " + str(y))
-			except:
+		for submission in reddit.subreddit('memes').new(limit=1):
+			url = submission.url_overridden_by_dest
+			if (url in used):
 				pass
+			else:
+				response = requests.get(url)
+				title = submission.title + " - " + submission.url_overridden_by_dest.split("/")[-1]
+				file = open(title,"wb")
+				file.write(response.content)
+				file.close()
+				used.append(url)
+				print("Downloaded ==> %s, with title ==> %s" %(url, submission.title))
+			time.sleep(0.2)
 	except:
-		pass
+		print("Failed to download")
