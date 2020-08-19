@@ -16,4 +16,6 @@
 
 **Usage**
 
+*EDIT client_id and client_secret with your own tokens before starting*
+
 `python3 memeget.py`
